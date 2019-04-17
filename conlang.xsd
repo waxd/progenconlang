@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="waxd.dev/Conlang"
+xmlns="waxd.dev/Conlang"
+elementFormDefault="unqualified">
+
+<xs:element name="conlang">
+  <xs:complexType>
+    <xs:element name="LanguageName" type="xs:string"/>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
