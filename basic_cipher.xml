@@ -3,5 +3,7 @@
     xmlns="waxd.dev/Conlang"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
-  <LanguageName>Example Lang</LanguageName>
+  <LanguageName>Test Language</LanguageName>
+  <LanguageType>cipher</LanguageType>
+  <seed>1</seed>
 </conlang>
