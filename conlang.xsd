@@ -2,11 +2,14 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 targetNamespace="waxd.dev/Conlang"
 xmlns="waxd.dev/Conlang"
-elementFormDefault="unqualified">
+elementFormDefault="unqualified"
+version="0.0.1">
 
 <xs:element name="conlang">
   <xs:complexType>
-    <xs:element name="LanguageName" type="xs:string"/>
+    <xs:sequence>
+      <xs:element name="LanguageName" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:element>
 

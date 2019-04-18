@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<conlang
+    xmlns="waxd.dev/Conlang"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
+  <LanguageName>Example Lang</LanguageName>
+</conlang>
