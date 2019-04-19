@@ -22,10 +22,10 @@ class CipherGenerationTestCase(unittest.TestCase):
     def test_translate_to_conlang(self):
         en_string = "Hello world"
         conlang_string = self.conlang.translate_to_conlang(en_string)
-        self.assertEqual(conlang_string, "Mxtth nhytq")
+        self.assertEqual(conlang_string, "Wimma gazml")
 
     def test_translate_from_conlang(self):
-        conlang_string = "Mxtth nhytq"
+        conlang_string = "Wimma gazml"
         en_string = self.conlang.translate_from_conlang(conlang_string)
         self.assertEqual(en_string, "Hello world")
         

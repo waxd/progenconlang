@@ -42,14 +42,30 @@ class Conlang:
         return ''.join(translation)
             
     def __generate_cipher(self):
-        en_letters = string.ascii_lowercase + string.ascii_uppercase
+        vowels_lowercase = 'aeiouy'
+        vowels_uppercase = 'AEIOUY'
+        consonants_lowercase = string.ascii_lowercase.translate(
+            str.maketrans('', '', vowels_lowercase))
+        consonants_uppercase = string.ascii_uppercase.translate(
+            str.maketrans('', '', vowels_uppercase))
+        letters = ''.join([vowels_lowercase,
+                           vowels_uppercase,
+                           consonants_lowercase,
+                           consonants_uppercase])
         random.seed(self.seed)
-        conlang_letters_lower = random.sample(string.ascii_lowercase,
-                                              len(string.ascii_lowercase))
+        conlang_vowels_lowercase = random.sample(vowels_lowercase,
+                                                 len(vowels_lowercase))
+        conlang_consonants_lowercase = random.sample(consonants_lowercase,
+                                                     len(consonants_lowercase))
         random.seed(self.seed)
-        conlang_letters_upper = random.sample(string.ascii_uppercase,
-                                              len(string.ascii_uppercase))
-        conlang_letters = conlang_letters_lower + conlang_letters_upper
-        assert len(en_letters) == len(conlang_letters)
-        self.cipher_to_conlang = dict(zip(en_letters, conlang_letters))
-        self.cipher_from_conlang = dict(zip(conlang_letters, en_letters))
+        conlang_vowels_uppercase = random.sample(vowels_uppercase,
+                                                 len(vowels_uppercase))
+        conlang_consonants_uppercase = random.sample(consonants_uppercase,
+                                                     len(consonants_uppercase))
+        conlang_letters = ''.join(conlang_vowels_lowercase
+                                  + conlang_vowels_uppercase
+                                  + conlang_consonants_lowercase
+                                  + conlang_consonants_uppercase)
+        assert len(letters) == len(conlang_letters)
+        self.cipher_to_conlang = dict(zip(letters, conlang_letters))
+        self.cipher_from_conlang = dict(zip(conlang_letters, letters))
