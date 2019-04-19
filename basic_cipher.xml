@@ -5,5 +5,5 @@
     xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
   <LanguageName>Test Language</LanguageName>
   <LanguageType>cipher</LanguageType>
-  <seed>1</seed>
+  <seed>12</seed>
 </conlang>
