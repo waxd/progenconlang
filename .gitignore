@@ -1,2 +1,5 @@
 # ignore compiled python files
 *.pyc
+
+# ignore files created during testing
+*.tmp
