@@ -20,11 +20,23 @@ class Conlang:
         if self.language_type is LanguageType.CIPHER:
             self.__generate_cipher()
         if name is None:
-            self.language_name = self.translate_to_conlang("language")
+            self.language_name = self.translate_to_conlang("Language")
             
-    def generate(self, seed: int = None):
-        pass
-    
+    def save(self, filename: str):
+        with open(filename, 'w') as fout:
+            fout.write('''<?xml version="1.0"?>
+<conlang
+    xmlns="waxd.dev/Conlang"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
+  <LanguageName>{name}</LanguageName>
+  <LanguageType>{type}</LanguageType>
+  <seed>{seed}</seed>
+</conlang>\n'''.format(
+    name=self.language_name,
+    type=str(self.language_type.value),
+    seed=self.seed))
+
     def translate_to_conlang(self, text: str) -> str:
         return self.__translate_with_cipher(text, self.cipher_to_conlang)
 

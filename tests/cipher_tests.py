@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, sys
+import os, sys, filecmp
 import unittest
 
 sys.path.append(os.path.join(
@@ -17,7 +17,8 @@ class CipherGenerationTestCase(unittest.TestCase):
         self.conlang = Conlang(seed=12)
 
     def test_save_config(self):
-        self.assertTrue(False)
+        self.conlang.save("test_save.tmp")
+        self.assertTrue(filecmp.cmp("test_save.tmp", "../basic_cipher.xml"))
     
     def test_translate_to_conlang(self):
         en_string = "Hello world"
