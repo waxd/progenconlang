@@ -24,18 +24,19 @@ class Conlang:
             
     def save(self, filename: str):
         with open(filename, 'w') as fout:
-            fout.write('''<?xml version="1.0"?>
-<conlang
-    xmlns="waxd.dev/Conlang"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
-  <LanguageName>{name}</LanguageName>
-  <LanguageType>{type}</LanguageType>
-  <seed>{seed}</seed>
-</conlang>\n'''.format(
-    name=self.language_name,
-    type=str(self.language_type.value),
-    seed=self.seed))
+            fout.write(
+                '<?xml version="1.0"?>\n'
+                '<conlang\n'
+                '    xmlns="waxd.dev/Conlang"\n'
+                '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+                '    xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">\n'
+                '  <LanguageName>{name}</LanguageName>\n'
+                '  <LanguageType>{type}</LanguageType>\n'
+                '  <seed>{seed}</seed>\n'
+                '</conlang>\n'.format(
+                    name=self.language_name,
+                    type=str(self.language_type.value),
+                    seed=self.seed))
 
     def translate_to_conlang(self, text: str) -> str:
         return self.__translate_with_cipher(text, self.cipher_to_conlang)
