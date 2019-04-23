@@ -7,6 +7,7 @@ from enum import Enum
 
 class LanguageType(Enum):
     CIPHER = "cipher"
+    LEXICON = "lexicon"
 
 class Conlang:
     def __init__(self,
@@ -43,10 +44,8 @@ class Conlang:
         tree = xml.etree.ElementTree.parse(filename)
         root = tree.getroot()
         language_name = root.find("{waxd.dev/Conlang}LanguageName").text
-        language_type = root.find("{waxd.dev/Conlang}LanguageType").text
+        language_type = LanguageType(root.find("{waxd.dev/Conlang}LanguageType").text)
         seed = int(root.find("{waxd.dev/Conlang}seed").text)
-        if language_type is LanguageType.CIPHER.value:
-            language_type = LanguageType.CIPHER
         return Conlang(name=language_name,
                        language_type=language_type,
                        seed=seed)
