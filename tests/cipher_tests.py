@@ -18,7 +18,7 @@ class CipherGenerationTestCase(unittest.TestCase):
 
     def test_save_config(self):
         self.conlang.save("test_save.tmp")
-        self.assertTrue(filecmp.cmp("test_save.tmp", "../basic_cipher.xml"))
+        self.assertTrue(filecmp.cmp("test_save.tmp", "testdata/basic_cipher.xml"))
     
     def test_translate_to_conlang(self):
         en_string = "Hello world"
@@ -32,7 +32,7 @@ class CipherGenerationTestCase(unittest.TestCase):
         
 class CipherLoadTestCase(unittest.TestCase):
     def setUp(self):
-        self.conlang = Conlang.load("../basic_cipher.xml")
+        self.conlang = Conlang.load("testdata/basic_cipher.xml")
 
     def test_translate_to_conlang(self):
         en_string = "Hello world"
