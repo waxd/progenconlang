@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-import os, sys, filecmp
+import filecmp
+import os
+import sys
 import unittest
 
 sys.path.append(os.path.join(
