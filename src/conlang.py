@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import random, string
+import random, string, xmlschema
 import xml.etree.ElementTree
 from typing import Mapping
 from enum import Enum
@@ -10,6 +10,7 @@ class LanguageType(Enum):
     LEXICON = "lexicon"
 
 class Conlang:
+    schema = xmlschema.XMLSchema('../schemas/conlang.xsd')
     def __init__(self,
                  name: str = None,
                  language_type: "LanguageType" = LanguageType.CIPHER,
@@ -41,6 +42,7 @@ class Conlang:
                     seed=self.seed))
 
     def load(filename: str):
+        Conlang.schema.validate(filename)
         tree = xml.etree.ElementTree.parse(filename)
         root = tree.getroot()
         language_name = root.find("{waxd.dev/Conlang}LanguageName").text
