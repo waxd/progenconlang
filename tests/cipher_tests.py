@@ -32,13 +32,17 @@ class CipherGenerationTestCase(unittest.TestCase):
         
 class CipherLoadTestCase(unittest.TestCase):
     def setUp(self):
-        self.conlang = Conlang("testdata/basic_cipher.xml")
+        self.conlang = Conlang.load("../basic_cipher.xml")
 
     def test_translate_to_conlang(self):
-        pass
+        en_string = "Hello world"
+        conlang_string = self.conlang.translate_to_conlang(en_string)
+        self.assertEqual(conlang_string, "Wimma gazml")
 
     def test_tranlsate_from_conlang(self):
-        pass
+        conlang_string = "Wimma gazml"
+        en_string = self.conlang.translate_from_conlang(conlang_string)
+        self.assertEqual(en_string, "Hello world")
 
 if __name__ == '__main__':
     unittest.main()

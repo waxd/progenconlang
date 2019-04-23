@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import random, string
+import xml.etree.ElementTree
 from typing import Mapping
 from enum import Enum
 
@@ -37,6 +38,18 @@ class Conlang:
                     name=self.language_name,
                     type=str(self.language_type.value),
                     seed=self.seed))
+
+    def load(filename: str):
+        tree = xml.etree.ElementTree.parse(filename)
+        root = tree.getroot()
+        language_name = root.find("{waxd.dev/Conlang}LanguageName").text
+        language_type = root.find("{waxd.dev/Conlang}LanguageType").text
+        seed = int(root.find("{waxd.dev/Conlang}seed").text)
+        if language_type is LanguageType.CIPHER.value:
+            language_type = LanguageType.CIPHER
+        return Conlang(name=language_name,
+                       language_type=language_type,
+                       seed=seed)
 
     def translate_to_conlang(self, text: str) -> str:
         return self.__translate_with_cipher(text, self.cipher_to_conlang)
