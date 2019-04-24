@@ -15,6 +15,7 @@ from conlang import Conlang
 class ValidateXMLTestCase(unittest.TestCase):
     def test_all_good_examples_load_without_error(self):
         Conlang.load("testdata/basic_cipher.xml")
+        Conlang.load("testdata/basic_lexicon.xml")
 
     def test_all_bad_examples_throw_error(self):
         with self.assertRaises(
