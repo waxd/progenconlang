@@ -67,8 +67,26 @@ class Conlang:
                 translation.append(l)
         assert len(text) is len(translation)
         return ''.join(translation)
-            
+
+    def __translate_with_lexicon(self,
+                                 text: str,
+                                 lexicon: Mapping[str, str]) -> str:
+        translation = []
+        for w in text.split():
+            translation.append(self.__translate_word_with_lexicon(w, lexicon))
+        return ' '.join(translation)
+
+    def __translate_word_with_lexicon(self,
+                                      text: str,
+                                      lexicon: Mapping[str, str]) -> str:
+        assert text.isalnum(), "{text}: expected only a-zA-Z".format(text=text)
+        if text not in lexicon:
+            return text
+        else:
+            return lexicon[text]
+
     def __generate_cipher(self):
+        assert self.language_type == LanguageType.CIPHER
         vowels_lowercase = 'aeiouy'
         vowels_uppercase = 'AEIOUY'
         consonants_lowercase = string.ascii_lowercase.translate(
