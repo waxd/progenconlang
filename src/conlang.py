@@ -1,33 +1,46 @@
 #!/usr/bin/python3
 
-import random, string, xmlschema
+import random
+import string
+import xmlschema
 import xml.etree.ElementTree
-from typing import Mapping
+from typing import Mapping, List, Any, Union
 from enum import Enum
+
 
 class LanguageType(Enum):
     CIPHER = "cipher"
     LEXICON = "lexicon"
 
+
 class Conlang:
     schema = xmlschema.XMLSchema('../schemas/conlang.xsd')
+
     def __init__(self,
                  name: str = None,
                  language_type: "LanguageType" = LanguageType.CIPHER,
                  seed: int = None):
         self.language_name = name
-        self.language_type = LanguageType.CIPHER
+        self.language_type = language_type
         self.seed = seed
         if seed is None:
-            self.seed = random.randint(0,4294967295)
+            self.seed = random.randint(0, 4294967295)
+
         if self.language_type is LanguageType.CIPHER:
-            self.__generate_cipher()
+            self.translator = CipherTranslator(seed)
+        elif self.language_type is LanguageType.LEXICON:
+            self.translator = LexiconTranslator(seed)
+        else:
+            # Sanity check: A new language type may need to be added.
+            assert False,\
+                "{} is an unknown language type.".format(self.language_type)
+
         if name is None:
             self.language_name = self.translate_to_conlang("Language")
             
     def save(self, filename: str):
-        with open(filename, 'w') as fout:
-            fout.write(
+        with open(filename, 'w') as file_out:
+            file_out.write(
                 '<?xml version="1.0"?>\n'
                 '<conlang\n'
                 '    xmlns="waxd.dev/Conlang"\n'
@@ -41,6 +54,7 @@ class Conlang:
                     type=str(self.language_type.value),
                     seed=self.seed))
 
+    @staticmethod
     def load(filename: str):
         Conlang.schema.validate(filename)
         tree = xml.etree.ElementTree.parse(filename)
@@ -53,64 +67,86 @@ class Conlang:
                        seed=seed)
 
     def translate_to_conlang(self, text: str) -> str:
-        return self.__translate_with_cipher(text, self.cipher_to_conlang)
+        return self.translator.translate(text)
 
     def translate_from_conlang(self, text: str) -> str:
-        return self.__translate_with_cipher(text, self.cipher_from_conlang)
+        return self.translator.translate(text, reverse=True)
 
-    def __translate_with_cipher(self, text: str, cipher: Mapping[str, str]) -> str:
+
+class Translator:
+    def __init__(self):
+        pass
+
+
+class CipherTranslator(Translator):
+    def __init__(self, seed: int):
+        vowels = 'aeiouy'
+        consonants = string.ascii_lowercase.translate(
+            str.maketrans('', '', vowels))
+        letters = ''.join([vowels, consonants])
+        random.seed(seed)
+        cipher_vowels = random.sample(vowels, len(vowels))
+        cipher_consonants = random.sample(consonants, len(consonants))
+        cipher_letters = ''.join(cipher_vowels + cipher_consonants)
+        assert len(letters) == len(cipher_letters)
+        self.cipher_to = dict(zip(letters, cipher_letters))
+        self.cipher_from = dict(zip(cipher_letters, letters))
+
+    def translate(self, text: str, reverse: bool = False) -> str:
         translation = []
+        if reverse:
+            cipher = self.cipher_from
+        else:
+            cipher = self.cipher_to
         for l in text:
-            if l in cipher:
-                translation.append(cipher[l])
+            if l.lower() in cipher:
+                if l.isupper():
+                    translation.append(cipher[l.lower()].upper())
+                else:
+                    translation.append(cipher[l])
             else:
                 translation.append(l)
         assert len(text) is len(translation)
         return ''.join(translation)
 
-    def __translate_with_lexicon(self,
-                                 text: str,
-                                 lexicon: Mapping[str, str]) -> str:
+    def _set_cipher(self, cipher: Mapping[str, str]):
+        """For testing"""
+        self.cipher_to = cipher
+        self.cipher_from = dict(zip(cipher.values(), cipher.keys()))
+
+
+class LexiconTranslator(Translator):
+    def __init__(self, seed: int):
+        pass
+
+    def translate(self, text: str, reverse: bool = False) -> str:
         translation = []
         for w in text.split():
-            translation.append(self.__translate_word_with_lexicon(w, lexicon))
+            translation.append(self._translate_word(w, reverse))
         return ' '.join(translation)
 
-    def __translate_word_with_lexicon(self,
-                                      text: str,
-                                      lexicon: Mapping[str, str]) -> str:
+    def _translate_word(self, text: str, reverse: bool = False) -> str:
         assert text.isalnum(), "{text}: expected only a-zA-Z".format(text=text)
-        if text not in lexicon:
-            return text
+        if reverse:
+            lexicon = self.lexicon_from
         else:
-            return lexicon[text]
+            lexicon = self.lexicon_to
 
-    def __generate_cipher(self):
-        assert self.language_type == LanguageType.CIPHER
-        vowels_lowercase = 'aeiouy'
-        vowels_uppercase = 'AEIOUY'
-        consonants_lowercase = string.ascii_lowercase.translate(
-            str.maketrans('', '', vowels_lowercase))
-        consonants_uppercase = string.ascii_uppercase.translate(
-            str.maketrans('', '', vowels_uppercase))
-        letters = ''.join([vowels_lowercase,
-                           vowels_uppercase,
-                           consonants_lowercase,
-                           consonants_uppercase])
-        random.seed(self.seed)
-        conlang_vowels_lowercase = random.sample(vowels_lowercase,
-                                                 len(vowels_lowercase))
-        conlang_consonants_lowercase = random.sample(consonants_lowercase,
-                                                     len(consonants_lowercase))
-        random.seed(self.seed)
-        conlang_vowels_uppercase = random.sample(vowels_uppercase,
-                                                 len(vowels_uppercase))
-        conlang_consonants_uppercase = random.sample(consonants_uppercase,
-                                                     len(consonants_uppercase))
-        conlang_letters = ''.join(conlang_vowels_lowercase
-                                  + conlang_vowels_uppercase
-                                  + conlang_consonants_lowercase
-                                  + conlang_consonants_uppercase)
-        assert len(letters) == len(conlang_letters)
-        self.cipher_to_conlang = dict(zip(letters, conlang_letters))
-        self.cipher_from_conlang = dict(zip(conlang_letters, letters))
+        word = text.lower()
+        if word in lexicon:
+            if text.istitle():
+                return lexicon[word].title()
+            elif text.isupper():
+                return lexicon[word].upper()
+            elif text.islower():
+                return lexicon[word].lower()
+            else:
+                # TODO Maintain weird mixed caps (e.g. "HelLO"
+                pass
+        else:
+            return text
+
+    def _set_lexicon(self, lexicon: Mapping[str, str]):
+        """For testing"""
+        self.lexicon_to = lexicon
+        self.lexicon_from = dict(zip(lexicon.values(), lexicon.keys()))
