@@ -12,6 +12,7 @@ sys.path.append(os.path.join(
 
 from conlang import Conlang
 
+
 class ValidateXMLTestCase(unittest.TestCase):
     def test_all_good_examples_load_without_error(self):
         Conlang.load("testdata/basic_cipher.xml")
@@ -21,6 +22,7 @@ class ValidateXMLTestCase(unittest.TestCase):
         with self.assertRaises(
                 xmlschema.validators.exceptions.XMLSchemaValidationError):
             Conlang.load("testdata/bad_cipher.xml")
+
 
 if __name__ == '__main__':
     unittest.main()
