@@ -11,5 +11,6 @@ setup(
     description='',
     install_requires=[
         "xmlschema",
+        "xmldiff",
     ],
 )
