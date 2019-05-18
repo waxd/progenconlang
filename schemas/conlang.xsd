@@ -19,11 +19,11 @@ version="0.0.1">
       </xs:element>
       <xs:element name="seed" type="xs:integer"/>
       <xs:element name="lexicon" minOccurs="0">
-	<xs:complexType>
-	  <xs:sequence minOccurs="0" maxOccurs="unbounded">
-	    <xs:element name="word" type="xs:string"/>
-	  </xs:sequence>
-	</xs:complexType>
+		<xs:complexType>
+		  <xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="word" type="xs:string"/>
+		  </xs:sequence>
+		</xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
