@@ -9,3 +9,4 @@
 
 # Used by setup tools
 progenconlang.egg-info*
+dist/*.egg
