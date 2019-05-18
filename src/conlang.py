@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
+import hashlib
 import random
+import re
 import string
 import xmlschema
 import xml.etree.ElementTree
@@ -32,12 +34,12 @@ class Conlang:
             self.translator = LexiconTranslator(seed)
         else:
             # Sanity check: A new language type may need to be added.
-            assert False,\
+            assert False, \
                 "{} is an unknown language type.".format(self.language_type)
 
         if name is None:
             self.language_name = self.translate_to_conlang("Language")
-            
+
     def save(self, filename: str):
         with open(filename, 'w') as file_out:
             file_out.write(
@@ -116,14 +118,36 @@ class CipherTranslator(Translator):
 
 
 class LexiconTranslator(Translator):
-    def __init__(self, seed: int):
-        pass
+    def __init__(self, seed: int, words: List[str] = []):
+        self.letters = string.ascii_lowercase
+        self.seed = seed
+        self.lexicon_to = {}
+        for word in words:
+            self.add_word(word)
+        self.lexicon_from = dict(zip(self.lexicon_to.values(),
+                                     self.lexicon_to.keys()))
+
+    def add_word(self, w: str):
+        word = w.lower()
+        word_seed = hashlib.md5(bytes(word + str(self.seed), "utf-8")).hexdigest()
+        random.seed(word_seed)
+        length_difference = int(random.normalvariate(0.5, 2))
+        length = len(word) + length_difference
+        new_word = []
+        if length < 1:
+            length = 1
+        for _ in range(length):
+            new_word.append(random.choice(self.letters))
+        self.lexicon_to[word] = ''.join(new_word)
 
     def translate(self, text: str, reverse: bool = False) -> str:
         translation = []
-        for w in text.split():
-            translation.append(self._translate_word(w, reverse))
-        return ' '.join(translation)
+        for w in re.split(r'(\W+)', text):
+            if w.isalnum():
+                translation.append(self._translate_word(w, reverse))
+            else:
+                translation.append(w)
+        return ''.join(translation)
 
     def _translate_word(self, text: str, reverse: bool = False) -> str:
         assert text.isalnum(), "{text}: expected only a-zA-Z".format(text=text)

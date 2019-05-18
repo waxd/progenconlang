@@ -39,6 +39,28 @@ class CipherTranslatorTests(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
+class LexiconGenerationTests(unittest.TestCase):
+    def setUp(self):
+        self.translator = LexiconTranslator(seed=12, words=["hello", "world"])
+
+    def test_non_word_translate(self):
+        expected = "dog"
+        actual = self.translator.translate("dog")
+        self.assertEqual(expected, actual)
+
+    def test_add_word(self):
+        output = self.translator.translate("dog")
+        self.assertEqual("dog", output)
+        self.translator.add_word("dog")
+        output = self.translator.translate("dog")
+        self.assertEqual("gbch", output)
+
+    def test_translate_multiple_words(self):
+        expected = "Takooru, lcidmfg"
+        actual = self.translator.translate("Hello, world")
+        self.assertEqual(expected, actual)
+
+
 class LexiconTranslatorTests(unittest.TestCase):
     def setUp(self):
         self.translator = LexiconTranslator(seed=12)
