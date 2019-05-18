@@ -16,22 +16,25 @@ class LanguageType(Enum):
 
 
 class Conlang:
-    schema = xmlschema.XMLSchema('../schemas/conlang.xsd')
+    schema = xmlschema.XMLSchema("../schemas/conlang.xsd")
 
     def __init__(self,
                  name: str = None,
                  language_type: "LanguageType" = LanguageType.CIPHER,
-                 seed: int = None):
+                 seed: int = None,
+                 word_file: str = None):
         self.language_name = name
         self.language_type = language_type
-        self.seed = seed
-        if seed is None:
+        if seed:
+            self.seed = seed
+        else:
+            random.seed()
             self.seed = random.randint(0, 4294967295)
 
         if self.language_type is LanguageType.CIPHER:
-            self.translator = CipherTranslator(seed)
+            self.translator = CipherTranslator(self.seed)
         elif self.language_type is LanguageType.LEXICON:
-            self.translator = LexiconTranslator(seed)
+            self.translator = LexiconTranslator(self.seed, word_file)
         else:
             # Sanity check: A new language type may need to be added.
             assert False, \
@@ -118,14 +121,23 @@ class CipherTranslator(Translator):
 
 
 class LexiconTranslator(Translator):
-    def __init__(self, seed: int, words: List[str] = []):
+    schema = xmlschema.XMLSchema('../schemas/lexicon.xsd')
+
+    def __init__(self, seed: int, word_file: str = None):
         self.letters = string.ascii_lowercase
         self.seed = seed
         self.lexicon_to = {}
-        for word in words:
-            self.add_word(word)
+        if word_file:
+            self.load_from_file(word_file)
         self.lexicon_from = dict(zip(self.lexicon_to.values(),
                                      self.lexicon_to.keys()))
+
+    def load_from_file(self, filename: str):
+        assert filename is not None
+        LexiconTranslator.schema.validate(filename)
+        tree = xml.etree.ElementTree.parse(filename)
+        for element in tree.findall("{waxd.dev/Lexicon}word"):
+            self.add_word(element.text)
 
     def add_word(self, w: str):
         word = w.lower()

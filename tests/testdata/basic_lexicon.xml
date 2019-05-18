@@ -3,11 +3,7 @@
     xmlns="waxd.dev/Conlang"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="waxd.dev/Conlang schemas/conlang.xsd">
-  <LanguageName>Moxkeoki</LanguageName>
+  <LanguageName>Gilww</LanguageName>
   <LanguageType>lexicon</LanguageType>
   <seed>12</seed>
-  <lexicon>
-    <word>hello</word>
-    <word>world</word>
-  </lexicon>
 </conlang>

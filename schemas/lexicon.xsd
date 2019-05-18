@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="waxd.dev/Lexicon"
+xmlns="waxd.dev/Lexicon"
+elementFormDefault="unqualified"
+version="0.0.1">
+
+<xs:element name="lexicon">
+  <xs:complexType>
+	<xs:sequence minOccurs="0" maxOccurs="unbounded">
+	  <xs:element name="word" type="xs:string"/>
+	</xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
