@@ -3,3 +3,9 @@
 
 # ignore files created during testing
 *.tmp
+
+# Used by PyCharm projects
+.idea*
+
+# Used by setup tools
+progenconlang.egg-info*
