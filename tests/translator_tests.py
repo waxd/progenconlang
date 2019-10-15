@@ -11,6 +11,7 @@ sys.path.append(os.path.join(
 
 from conlang import CipherTranslator
 from conlang import LexiconTranslator
+from conlang import SyllableGenerator
 
 
 class CipherTranslatorTests(unittest.TestCase):
@@ -91,6 +92,15 @@ class LexiconTranslatorTests(unittest.TestCase):
         expected = "hello world"
         actual = self.translator.translate("goodnight moon", reverse=True)
         self.assertEqual(expected, actual)
+
+
+class PhonologyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.generator = SyllableGenerator()
+
+    def test_syllable_generation(self):
+        word = self.generator.generate_syllable()
+        print(word)
 
 
 if __name__ == '__main__':

@@ -145,12 +145,15 @@ class LexiconTranslator(Translator):
         random.seed(word_seed)
         length_difference = int(random.normalvariate(0.5, 2))
         length = len(word) + length_difference
+        self.lexicon_to[word] = self.generate_word(length)
+
+    def generate_word(self, length: int):
         new_word = []
         if length < 1:
             length = 1
         for _ in range(length):
             new_word.append(random.choice(self.letters))
-        self.lexicon_to[word] = ''.join(new_word)
+        return ''.join(new_word)
 
     def translate(self, text: str, reverse: bool = False) -> str:
         translation = []
@@ -186,3 +189,37 @@ class LexiconTranslator(Translator):
         """For testing"""
         self.lexicon_to = lexicon
         self.lexicon_from = dict(zip(lexicon.values(), lexicon.keys()))
+
+
+class SyllableGenerator:
+    """
+    Used to generate syllables for words.
+    """
+    vowels = ['a', 'e', 'o', 'i', 'u']
+    glide = ['y', 'w']
+    liquid = ['r', 'l']
+    nasal = ['m', 'n', 'ng']
+    fricative = ['z', 'v', 'th', 'f', 's', 'sh', 'zh']
+    stop = ['b', 'd', 'g', 'p', 't', 'k']
+    click = ['!', '?']
+    sonority = [vowels, glide, liquid, nasal, fricative, stop]
+
+    def __init__(self):
+        random.seed()
+        self.phonetic_inventory_size = random.lognormvariate(3.367, 0.363)
+        print(self.phonetic_inventory_size)
+
+    def generate_nuclei(self):
+        pass
+
+
+    def generate_syllable(self) -> str:
+        random.seed()
+        nucleus = random.sample(SyllableGenerator.vowels, random.randint(1, 2))
+        starting_cc =\
+            random.sample(SyllableGenerator.stop, random.randint(0, 1))\
+            + random.sample(SyllableGenerator.fricative, random.randint(0, 1))\
+            + random.sample(SyllableGenerator.nasal, random.randint(0, 1))\
+            + random.sample(SyllableGenerator.liquid, random.randint(0, 1))\
+            + random.sample(SyllableGenerator.glide, random.randint(0, 1))
+        return ''.join(starting_cc + nucleus)

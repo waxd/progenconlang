@@ -36,9 +36,5 @@ class LexiconGenerationTestsCase(unittest.TestCase):
         actual = self.conlang.translate_from_conlang("Takooru lcidm")
         self.assertEqual(expected, actual)
 
-class WordGenerationTestCase(unittest.TestCase):
-    def test_word_gen(self):
-        pass
-
 if __name__ == '__main__':
     unittest.main()
