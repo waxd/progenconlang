@@ -13,6 +13,7 @@ sys.path.append(os.path.join(
 from conlang import Conlang
 from conlang import LanguageType
 
+
 class LexiconGenerationTestsCase(unittest.TestCase):
     def setUp(self):
         self.conlang = Conlang(language_type=LanguageType.LEXICON,
@@ -35,6 +36,7 @@ class LexiconGenerationTestsCase(unittest.TestCase):
         expected = "Hello world"
         actual = self.conlang.translate_from_conlang("Takooru lcidm")
         self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

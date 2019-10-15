@@ -63,6 +63,7 @@ class LexiconGenerationTests(unittest.TestCase):
         actual = self.translator.translate("Hello, world")
         self.assertEqual(expected, actual)
 
+
 class LexiconTranslatorTests(unittest.TestCase):
     def setUp(self):
         self.translator = LexiconTranslator(seed=12)

@@ -6,7 +6,7 @@ import re
 import string
 import xmlschema
 import xml.etree.ElementTree
-from typing import Mapping, List, Any, Union
+from typing import Mapping
 from enum import Enum
 
 
@@ -85,6 +85,7 @@ class Translator:
 
 class CipherTranslator(Translator):
     def __init__(self, seed: int):
+        super().__init__()
         vowels = 'aeiouy'
         consonants = string.ascii_lowercase.translate(
             str.maketrans('', '', vowels))
@@ -124,6 +125,7 @@ class LexiconTranslator(Translator):
     schema = xmlschema.XMLSchema('../schemas/lexicon.xsd')
 
     def __init__(self, seed: int, word_file: str = None):
+        super().__init__()
         self.letters = string.ascii_lowercase
         self.seed = seed
         self.lexicon_to = {}
@@ -212,8 +214,8 @@ class SyllableGenerator:
     def generate_nuclei(self):
         pass
 
-
-    def generate_syllable(self) -> str:
+    @staticmethod
+    def generate_syllable() -> str:
         random.seed()
         nucleus = random.sample(SyllableGenerator.vowels, random.randint(1, 2))
         starting_cc =\
